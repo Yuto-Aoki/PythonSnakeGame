@@ -80,33 +80,33 @@ class Snake():
             else:
                 cube.move(x=cube.x, y=cube.y)
         
-        def add(self):
-            """
-            Fruitをとった際にSnakeの末尾にCubeを追加する
-            """
-            tail = self.body[-1]
-            tail_x, tail_y = tail.x, tail.y
+    def addTail(self):
+        """
+        Fruitをとった際にSnakeの末尾にCubeを追加する
+        """
+        tail = self.body[-1]
+        tail_x, tail_y = tail.x, tail.y
 
-            # 右に進んでいるときは左に追加
-            if tail_x == 1 and tail_y == 0:
-                self.body.append(Cube((tail.pos[0]- 1, tail.pos[1]), x=tail_x, y=tail_y))
-            # 上に進んでいるときは下に追加
-            elif tail_x == 0 and tail_y == -1:
-                self.body.append(Cube((tail.pos[0], tail.pos[1] + 1), x=tail_x, y=tail_y))
-            # 左に進んでいるときは右に追加
-            elif tail_x == -1 and tail_y == 0:
-                self.body.append(Cube((tail.pos[0] + 1, tail.pos[1]), x=tail_x, y=tail_y))
-            # 下に進んでいるときは上に追加 
-            elif tail_x == 0 and tail_y == 1:
-                self.body.append(Cube((tail.pos[0], tail.pos[1] - 1), x=tail_x, y=tail_y))
+        # 右に進んでいるときは左に追加
+        if tail_x == 1 and tail_y == 0:
+            self.body.append(Cube((tail.pos[0]- 1, tail.pos[1]), x=tail_x, y=tail_y))
+        # 上に進んでいるときは下に追加
+        elif tail_x == 0 and tail_y == -1:
+            self.body.append(Cube((tail.pos[0], tail.pos[1] + 1), x=tail_x, y=tail_y))
+        # 左に進んでいるときは右に追加
+        elif tail_x == -1 and tail_y == 0:
+            self.body.append(Cube((tail.pos[0] + 1, tail.pos[1]), x=tail_x, y=tail_y))
+        # 下に進んでいるときは上に追加 
+        elif tail_x == 0 and tail_y == 1:
+            self.body.append(Cube((tail.pos[0], tail.pos[1] - 1), x=tail_x, y=tail_y))
 
         
-        def draw(self, surface):
-            """
-            各Cubeを描画
-            """
-            for cube in self.body:
-                cube.draw(surface)
+    def draw(self, surface):
+        """
+        各Cubeを描画
+        """
+        for cube in self.body:
+            cube.draw(surface)
 
 
 if __name__ == "__main__":
@@ -114,3 +114,10 @@ if __name__ == "__main__":
     win = pygame.display.set_mode((Width,Height))
     win.fill((0,0,0)) 
     cube.draw(win)
+    snake = Snake((255,0,0), (10,10))
+    snake.addTail()
+    clock = pygame.time.Clock()
+    while 0:
+        pygame.time.delay(50)
+        clock.tick(10)
+        snake.move()
