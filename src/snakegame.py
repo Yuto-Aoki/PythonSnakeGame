@@ -9,6 +9,27 @@ Height = 500  # 画面高さ
 Cols = 25
 Rows = 20
 
+class Window:
+    """ウィンドウの基本クラス"""
+    EDGE_WIDTH = 4  # 白枠の幅
+    def __init__(self, rect):
+        self.rect = rect  # 一番外側の白い矩形
+        # 内側の黒い矩形
+        self.inner_rect = self.rect.inflate(-self.EDGE_WIDTH * 2,
+                                            -self.EDGE_WIDTH * 2)
+        self.is_visible = False  # ウィンドウを表示中か？
+    def draw(self, screen):
+        """ウィンドウを描画"""
+        if self.is_visible == False: return
+        pygame.draw.rect(screen, (255,255,255), self.rect, 0)
+        pygame.draw.rect(screen, (0,0,0), self.inner_rect, 0)
+    def show(self):
+        """ウィンドウを表示"""
+        self.is_visible = True
+    def hide(self):
+        """ウィンドウを隠す"""
+        self.is_visible = False
+
 class Cube():
     """
     Snakeの各体やFruitのオブジェクト
@@ -51,40 +72,64 @@ class Snake():
         self.x = 0
         self.y = 1
 
-    def move(self):
+    def move(self, surface):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.font.init()
-                screen = pygame.display.set_mode((200, 100))
-                pygame.display.set_caption("Continue?")
-                yes = pygame.Rect(30, 30, 50, 50)  # creates a rect object
-                no = pygame.Rect(100, 30, 70, 50)  # creates a rect object
-                font = pygame.font.SysFont(None, 25)
-    
-                #STEP2.テキストの設定
-                text1 = font.render("Yes", True, (0,0,0))
-                text2 = font.render("No", True, (0,0,0))
+                wnd = Window(pygame.Rect(140,334,360,140))
+                clock = pygame.time.Clock()
                 while True:
-                    screen.fill((0,0,0))  #画面を黒で塗りつぶす
-            
-                    pygame.draw.rect(screen, (255, 0, 0), yes)
-                    pygame.draw.rect(screen, (0, 255, 0), no)
-
-                    screen.blit(text1, (40, 45))
-                    screen.blit(text2, (105,45))
+                    clock.tick(60)
+                    # ウィンドウ表示中は更新を中止
+                    if not wnd.is_visible:
+                        pygame.display.update()
+                    wnd.draw(surface)  # ウィンドウの描画
                     pygame.display.update()
+                    wnd.show()
                     for event in pygame.event.get():
                         if event.type == pygame.QUIT:
-                            pygame.quit()
                             exit()
-                        if event.type == pygame.MOUSEBUTTONDOWN:
-                            if yes.collidepoint(event.pos):
-                                print("red button was pressed")
-                                pygame.quit()
-                                exit()
-                            if no.collidepoint(event.pos):
-                                print("green button was pressed")
-                                break
+                        if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                            exit()
+                        if event.type == pygame.KEYDOWN and event.key == pygame.K_y:
+                            exit()
+                        if event.type == pygame.KEYDOWN and event.key == pygame.K_n:
+                            wnd.hide()
+                            wnd.draw(surface)
+                            break
+                    else:
+                        continue
+                    break
+                # pygame.font.init()
+                # screen = pygame.display.set_mode((400, 200))
+                # pygame.display.set_caption("Continue?")
+                # yes = pygame.Rect(30, 30, 50, 50)  # creates a rect object
+                # no = pygame.Rect(100, 30, 70, 50)  # creates a rect object
+                # font = pygame.font.SysFont(None, 25)
+    
+                # #STEP2.テキストの設定
+                # text1 = font.render("Yes", True, (0,0,0))
+                # text2 = font.render("No", True, (0,0,0))
+                # while True:
+                #     screen.fill((0,0,0))  #画面を黒で塗りつぶす
+            
+                #     pygame.draw.rect(screen, (255, 0, 0), yes)
+                #     pygame.draw.rect(screen, (0, 255, 0), no)
+
+                #     screen.blit(text1, (40, 45))
+                #     screen.blit(text2, (105,45))
+                #     pygame.display.update()
+                #     for event in pygame.event.get():
+                #         if event.type == pygame.QUIT:
+                #             pygame.quit()
+                #             exit()
+                #         if event.type == pygame.MOUSEBUTTONDOWN:
+                #             if yes.collidepoint(event.pos):
+                #                 print("red button was pressed")
+                #                 pygame.quit()
+                #                 exit()
+                #             if no.collidepoint(event.pos):
+                #                 print("green button was pressed")
+                #                 self.reset((10, 10))
                 
             keys = pygame.key.get_pressed() # keyは押したままにする
             
@@ -197,7 +242,7 @@ class Game():
         while True:
             pygame.time.delay(50)
             self.clock.tick(10)
-            self.snake.move()
+            self.snake.move(self.surface)
             headPos = self.snake.head.pos
             if headPos[0] >= 20 or headPos[0] < 0 or headPos[1] >= 20 or headPos[1] < 0:
                 print("Score:", len(self.snake.body))
