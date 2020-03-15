@@ -56,16 +56,16 @@ class Snake():
             keys = pygame.key.get_pressed() # keyは押したままにする
             
             for key in keys:
-                if keys[pygame.K_LEFT] or keys[pygame.K_a]:
+                if keys[pygame.K_LEFT] or keys[pygame.K_a]:       # 左に進む
                     self.x = -1
                     self.y = 0
-                elif keys[pygame.K_UP] or keys[pygame.K_w]:
+                elif keys[pygame.K_UP] or keys[pygame.K_w]:       # 上に進む
                     self.x = 0
                     self.y = -1
-                elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+                elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:    # 右に進む
                     self.x = 1
                     self.y = 0
-                elif keys[pygame.K_DOWN] or keys[pygame.K_s]:
+                elif keys[pygame.K_DOWN] or keys[pygame.K_s]:     # 下に進む
                     self.x = 0
                     self.y = 1
                 self.turns[self.head.pos[:]] = [self.x, self.y]
@@ -79,6 +79,27 @@ class Snake():
                     self.turns.pop(posision)
             else:
                 cube.move(x=cube.x, y=cube.y)
+        
+        def add(self):
+            """
+            Fruitをとった際にSnakeの末尾にCubeを追加する
+            """
+            tail = self.body[-1]
+            tail_x, tail_y = tail.x, tail.y
+
+            # 右に進んでいるときは左に追加
+            if tail_x == 1 and tail_y == 0:
+                self.body.append(Cube((tail.pos[0]- 1, tail.pos[1])))
+            # 上に進んでいるときは下に追加
+            elif tail_x == 0 and tail_y == -1:
+                self.body.append(Cube((tail.pos[0], tail.pos[1] + 1)))
+            # 左に進んでいるときは右に追加
+            elif tail_x == -1 and tail_y == 0:
+                self.body.append(Cube((tail.pos[0] + 1, tail.pos[1])))
+            # 下に進んでいるときは上に追加 
+            elif tail_x == 0 and tail_y == 1:
+                self.body.append(Cube((tail.pos[0], tail.pos[1] - 1)))
+
 
 if __name__ == "__main__":
     cube = Cube((10, 10))
