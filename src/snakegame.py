@@ -3,15 +3,15 @@ import random
 import pygame
 import random
 
-Width = 500
-Height = 500
+Width = 500   # 画面幅
+Height = 500  # 画面高さ
 
 Cols = 25
 Rows = 20
 
 class Cube():
     """
-    Snakeの各体のオブジェクト
+    Snakeの各体やFruitのオブジェクト
     """
     def __init__(self, start, x=1, y=0, color=(255,0,0)):
         self.rows = 20
@@ -54,8 +54,38 @@ class Snake():
     def move(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
-                exit()
+                pygame.font.init()
+                screen = pygame.display.set_mode((200, 100))
+                pygame.display.set_caption("Continue?")
+                yes = pygame.Rect(30, 30, 50, 50)  # creates a rect object
+                no = pygame.Rect(100, 30, 70, 50)  # creates a rect object
+                font = pygame.font.SysFont(None, 25)
+    
+                #STEP2.テキストの設定
+                text1 = font.render("Yes", True, (0,0,0))
+                text2 = font.render("No", True, (0,0,0))
+                while True:
+                    screen.fill((0,0,0))  #画面を黒で塗りつぶす
+            
+                    pygame.draw.rect(screen, (255, 0, 0), yes)
+                    pygame.draw.rect(screen, (0, 255, 0), no)
+
+                    screen.blit(text1, (40, 45))
+                    screen.blit(text2, (105,45))
+                    pygame.display.update()
+                    for event in pygame.event.get():
+                        if event.type == pygame.QUIT:
+                            pygame.quit()
+                            exit()
+                        if event.type == pygame.MOUSEBUTTONDOWN:
+                            if yes.collidepoint(event.pos):
+                                print("red button was pressed")
+                                pygame.quit()
+                                exit()
+                            if no.collidepoint(event.pos):
+                                print("green button was pressed")
+                                break
+                
             keys = pygame.key.get_pressed() # keyは押したままにする
             
             for key in keys:
@@ -116,11 +146,12 @@ class Game():
     Game開始時に設定
     """
     def __init__(self):
-        self.surface = pygame.display.set_mode((Width,Height))
-        self.snake = Snake(pos=(10,10), color=(255,0,0))
-        self.snake.addTail()
+        pygame.display.set_caption("Snake Game!!")
+        self.surface = pygame.display.set_mode((Width, Height))
+        self.snake = Snake(pos=(10,10), color=(255,0,0)) # Snakeの初期値、色を決定
+        self.snake.addTail()                             # Snakeは最初2つのCubeを持っていることにする
         self.clock = pygame.time.Clock()
-        self.fruit = Cube(self.randomFruit(Rows, self.snake), color=(0,255,0))
+        self.fruit = Cube(self.randomFruit(Rows, self.snake), color=(0,255,0)) # フルーツの色を決定、場所はランダム
     
     def drawGrid(self, width, rows, surface):
         """
@@ -162,6 +193,7 @@ class Game():
         pygame.display.update()
     
     def play(self):
+        best_score = 0
         while True:
             pygame.time.delay(50)
             self.clock.tick(10)
@@ -169,6 +201,8 @@ class Game():
             headPos = self.snake.head.pos
             if headPos[0] >= 20 or headPos[0] < 0 or headPos[1] >= 20 or headPos[1] < 0:
                 print("Score:", len(self.snake.body))
+                best_score = max(len(self.snake.body), best_score)
+                print("Best Score:", best_score)
                 self.snake.reset((10, 10))
 
             if self.snake.body[0].pos == self.fruit.pos:
@@ -178,6 +212,8 @@ class Game():
             for x in range(len(self.snake.body)):
                 if self.snake.body[x].pos in list(map(lambda z: z.pos, self.snake.body[x+1:])):
                     print("Score:", len(self.snake.body))
+                    best_score = max(len(self.snake.body), best_score)
+                    print("Best Score:", best_score)
                     self.snake.reset((10,10))
                     break
                         
