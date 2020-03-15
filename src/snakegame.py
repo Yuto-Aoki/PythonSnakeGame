@@ -31,6 +31,15 @@ class Cube():
         x, y = self.pos
         pygame.draw.rect(surface, self.color, (x * dis + 1, y * dis + 1, dis - 2, dis - 2))
 
+class Snake():
+    def __init__(self, pos, color):
+        self.head = Cube(pos)
+        self.color = color
+        self.body = [self.head]
+        self.turns = {}
+        self.x = 0
+        self.y = 1
+
 if __name__ == "__main__":
     cube = Cube((10, 10))
     surface = pygame.Surface((10, 10))
