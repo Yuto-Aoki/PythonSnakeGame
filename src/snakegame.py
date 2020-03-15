@@ -89,16 +89,24 @@ class Snake():
 
             # 右に進んでいるときは左に追加
             if tail_x == 1 and tail_y == 0:
-                self.body.append(Cube((tail.pos[0]- 1, tail.pos[1])))
+                self.body.append(Cube((tail.pos[0]- 1, tail.pos[1]), x=tail_x, y=tail_y))
             # 上に進んでいるときは下に追加
             elif tail_x == 0 and tail_y == -1:
-                self.body.append(Cube((tail.pos[0], tail.pos[1] + 1)))
+                self.body.append(Cube((tail.pos[0], tail.pos[1] + 1), x=tail_x, y=tail_y))
             # 左に進んでいるときは右に追加
             elif tail_x == -1 and tail_y == 0:
-                self.body.append(Cube((tail.pos[0] + 1, tail.pos[1])))
+                self.body.append(Cube((tail.pos[0] + 1, tail.pos[1]), x=tail_x, y=tail_y))
             # 下に進んでいるときは上に追加 
             elif tail_x == 0 and tail_y == 1:
-                self.body.append(Cube((tail.pos[0], tail.pos[1] - 1)))
+                self.body.append(Cube((tail.pos[0], tail.pos[1] - 1), x=tail_x, y=tail_y))
+
+        
+        def draw(self, surface):
+            """
+            各Cubeを描画
+            """
+            for cube in self.body:
+                cube.draw(surface)
 
 
 if __name__ == "__main__":
