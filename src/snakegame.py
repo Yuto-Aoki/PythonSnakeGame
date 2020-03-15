@@ -131,9 +131,9 @@ class Game():
             y = y +sizeBtwn
 
             pygame.draw.line(surface, (255, 255, 255), (x, 0), (x, width))
-            pygame.draw.line(surface, (255, 255, 255), (0, y), (w, y))
+            pygame.draw.line(surface, (255, 255, 255), (0, y), (width, y))
     
-    def randomFruiat(self, rows, snake):
+    def randomFruit(self, rows, snake):
         """
         ランダムにフルーツを決定
         """
@@ -146,10 +146,9 @@ class Game():
                 continue
             else:
                 break
-
         return (x, y)
 
-    def redrawWindow(self):
+    def allDraw(self):
         """
         全ての描画処理
         """
@@ -158,14 +157,30 @@ class Game():
         self.snake.draw(self.surface)            # Snake描画
         self.fruit.draw(self.surface)            # Fruit描画
         pygame.display.update()
+    
+    def play(self):
+        while True:
+            pygame.time.delay(50)
+            self.clock.tick(10)
+            self.snake.move()
+            headPos = self.snake.head.pos
+            if headPos[0] >= 20 or headPos[0] < 0 or headPos[1] >= 20 or headPos[1] < 0:
+                print("Score:", len(self.snake.body))
+                self.snake.reset((10, 10))
+
+            if self.snake.body[0].pos == self.fruit.pos:
+                self.snake.addTail()
+                self.fruit = Cube(self.randomFruit(Rows, self.snake), color=(0,255,0))
+                
+            for x in range(len(self.snake.body)):
+                if self.snake.body[x].pos in list(map(lambda z: z.pos, self.snake.body[x+1:])):
+                    print("Score:", len(self.snake.body))
+                    self.snake.reset((10,10))
+                    break
+                        
+            self.allDraw()
         
 
 if __name__ == "__main__":
-    surface = pygame.display.set_mode((Width,Height))
-    surface.fill((0,0,0)) 
-    snake = Snake((255,0,0), (10,10))
-    snake.addTail()
-    clock = pygame.time.Clock()
-    pygame.time.delay(50)
-    clock.tick(10)
-    snake.move()
+    game = Game()
+    game.play()
