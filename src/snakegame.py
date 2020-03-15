@@ -39,6 +39,17 @@ class Snake():
         self.turns = {}
         self.x = 0
         self.y = 1
+    
+    def reset(self, pos):
+        """
+        Gameoverなどでリセットする際に呼び出される
+        """
+        self.head = Cube(pos)
+        self.body = []
+        self.body.append(self.head)
+        self.turns = {}
+        self.x = 0
+        self.y = 1
 
     def move(self):
         for event in pygame.event.get():
