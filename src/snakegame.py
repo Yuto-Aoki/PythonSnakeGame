@@ -58,9 +58,19 @@ class Snake():
                     self.x = 0
                     self.y = 1
                 self.turns[self.head.pos[:]] = [self.x, self.y]
+    
+        for i, cube in enumerate(self.body):
+            posision = cube.pos[:]
+            if posision in self.turns:    # 曲がる動作をしていたら
+                turn = self.turns[posision]
+                cube.move(x=turn[0], y=turn[1])
+                if i == len(self.body) - 1:
+                    self.turns.pop(posision)
+            else:
+                cube.move(x=cube.x, y=cube.y)
 
 if __name__ == "__main__":
     cube = Cube((10, 10))
-    surface = pygame.Surface((10, 10))
-    surface.fill((0,0,0)) 
-    cube.draw(surface)
+    win = pygame.display.set_mode((Width,Height))
+    win.fill((0,0,0)) 
+    cube.draw(win)
