@@ -33,12 +33,31 @@ class Cube():
 
 class Snake():
     def __init__(self, pos, color):
-        self.head = Cube(pos)
+        self.head = Cube(pos)   #頭の位置
         self.color = color
-        self.body = [self.head]
+        self.body = [self.head] # 体、最初に頭を追加
         self.turns = {}
         self.x = 0
         self.y = 1
+
+    def move(self):
+        for event in pygame.event.get():
+            keys = pygame.key.get_pressed() # keyは押したままにする
+            
+            for key in keys:
+                if keys[pygame.K_LEFT] or keys[pygame.K_a]:
+                    self.x = -1
+                    self.y = 0
+                elif keys[pygame.K_UP] or keys[pygame.K_w]:
+                    self.x = 0
+                    self.y = -1
+                elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+                    self.x = 1
+                    self.y = 0
+                elif keys[pygame.K_DOWN] or keys[pygame.K_s]:
+                    self.x = 0
+                    self.y = 1
+                self.turns[self.head.pos[:]] = [self.x, self.y]
 
 if __name__ == "__main__":
     cube = Cube((10, 10))
