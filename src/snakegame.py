@@ -120,6 +120,9 @@ class Game():
         self.fruit = Cube(self.randomFruit(Rows, self.snake), color=(0,255,0))
     
     def drawGrid(self, width, rows, surface):
+        """
+        Grid線を描画
+        """
         sizeBtwn = width // rows
         x = 0
         y = 0
@@ -131,6 +134,9 @@ class Game():
             pygame.draw.line(surface, (255, 255, 255), (0, y), (w, y))
     
     def randomFruiat(self, rows, snake):
+        """
+        ランダムにフルーツを決定
+        """
         positions = snake.body
 
         while True:
@@ -144,10 +150,13 @@ class Game():
         return (x, y)
 
     def redrawWindow(self):
+        """
+        全ての描画処理
+        """
         self.surface.fill((0,0,0))
-        self.drawGrid(Width, Rows, self.surface)
-        self.snake.draw(self.surface)
-        snack.draw(win)
+        self.drawGrid(Width, Rows, self.surface) # Grid線描画
+        self.snake.draw(self.surface)            # Snake描画
+        self.fruit.draw(self.surface)            # Fruit描画
         pygame.display.update()
         
 
