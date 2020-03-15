@@ -117,6 +117,7 @@ class Game():
         self.snake = Snake(pos=(10,10), color=(255,0,0))
         self.snake.addTail()
         self.clock = pygame.time.Clock()
+        self.fruit = Cube(self.randomFruit(Rows, self.snake), color=(0,255,0))
     
     def drawGrid(self, width, rows, surface):
         sizeBtwn = width // rows
@@ -128,11 +129,24 @@ class Game():
 
             pygame.draw.line(surface, (255, 255, 255), (x, 0), (x, width))
             pygame.draw.line(surface, (255, 255, 255), (0, y), (w, y))
+    
+    def randomFruiat(self, rows, snake):
+        positions = snake.body
+
+        while True:
+            x = random.randrange(1, rows-1)
+            y = random.randrange(1, rows-1)
+            if len(list(filter(lambda z: z.pos == (x, y), positions))) > 0:
+                continue
+            else:
+                break
+
+        return (x, y)
 
     def redrawWindow(self):
         self.surface.fill((0,0,0))
-        drawGrid(width, rows, win)
-        s.draw(win)
+        self.drawGrid(Width, Rows, self.surface)
+        self.snake.draw(self.surface)
         snack.draw(win)
         pygame.display.update()
         
