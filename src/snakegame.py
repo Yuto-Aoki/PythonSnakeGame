@@ -108,16 +108,41 @@ class Snake():
         for cube in self.body:
             cube.draw(surface)
 
+class Game():
+    """
+    Game開始時に設定
+    """
+    def __init__(self):
+        self.surface = pygame.display.set_mode((Width,Height))
+        self.snake = Snake(pos=(10,10), color=(255,0,0))
+        self.snake.addTail()
+        self.clock = pygame.time.Clock()
+    
+    def drawGrid(self, width, rows, surface):
+        sizeBtwn = width // rows
+        x = 0
+        y = 0
+        for line in range(rows):
+            x = x + sizeBtwn
+            y = y +sizeBtwn
+
+            pygame.draw.line(surface, (255, 255, 255), (x, 0), (x, width))
+            pygame.draw.line(surface, (255, 255, 255), (0, y), (w, y))
+
+    def redrawWindow(self):
+        self.surface.fill((0,0,0))
+        drawGrid(width, rows, win)
+        s.draw(win)
+        snack.draw(win)
+        pygame.display.update()
+        
 
 if __name__ == "__main__":
-    cube = Cube((10, 10))
-    win = pygame.display.set_mode((Width,Height))
-    win.fill((0,0,0)) 
-    cube.draw(win)
+    surface = pygame.display.set_mode((Width,Height))
+    surface.fill((0,0,0)) 
     snake = Snake((255,0,0), (10,10))
     snake.addTail()
     clock = pygame.time.Clock()
-    while 0:
-        pygame.time.delay(50)
-        clock.tick(10)
-        snake.move()
+    pygame.time.delay(50)
+    clock.tick(10)
+    snake.move()
