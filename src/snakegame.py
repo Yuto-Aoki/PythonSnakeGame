@@ -113,39 +113,7 @@ class Snake():
                             break
                     else:
                         continue
-                    break
-                # pygame.font.init()
-                # screen = pygame.display.set_mode((400, 200))
-                # pygame.display.set_caption("Continue?")
-                # yes = pygame.Rect(30, 30, 50, 50)  # creates a rect object
-                # no = pygame.Rect(100, 30, 70, 50)  # creates a rect object
-                # font = pygame.font.SysFont(None, 25)
-    
-                # #STEP2.テキストの設定
-                # text1 = font.render("Yes", True, (0,0,0))
-                # text2 = font.render("No", True, (0,0,0))
-                # while True:
-                #     screen.fill((0,0,0))  #画面を黒で塗りつぶす
-            
-                #     pygame.draw.rect(screen, (255, 0, 0), yes)
-                #     pygame.draw.rect(screen, (0, 255, 0), no)
-
-                #     screen.blit(text1, (40, 45))
-                #     screen.blit(text2, (105,45))
-                #     pygame.display.update()
-                #     for event in pygame.event.get():
-                #         if event.type == pygame.QUIT:
-                #             pygame.quit()
-                #             exit()
-                #         if event.type == pygame.MOUSEBUTTONDOWN:
-                #             if yes.collidepoint(event.pos):
-                #                 print("red button was pressed")
-                #                 pygame.quit()
-                #                 exit()
-                #             if no.collidepoint(event.pos):
-                #                 print("green button was pressed")
-                #                 self.reset((10, 10))
-                
+                    break              
             keys = pygame.key.get_pressed() # keyは押したままにする
             
             for key in keys:
@@ -266,13 +234,13 @@ class Game():
             wnd.draw(self.surface)  # ウィンドウの描画
             text = font.render("Game Over", True, (255,255,255))   # 描画する文字列の設定
             best_score = font.render(f"Your best score is {self.best_score}", True, (255,255,255))
-            yes = font.render("Yes: y", True, (255,0,0))
-            no = font.render("No: n", True, (0,255,0))
+            yes = font.render("Quit: y", True, (255,0,0))
+            no = font.render("Continue: n", True, (0,255,0))
     
             self.surface.blit(text, [180, 150])
             self.surface.blit(best_score, [140, 180])
             self.surface.blit(yes, [140, 220])
-            self.surface.blit(no, [280, 220])
+            self.surface.blit(no, [240, 220])
             
             pygame.display.update()
             wnd.show()
