@@ -71,6 +71,7 @@ class Snake():
         self.turns = {}
         self.x = 0
         self.y = 1
+        pygame.display.set_caption("Snake Game!!")
 
     def move(self, surface, best_score):
         self.best_score = best_score
@@ -251,18 +252,55 @@ class Game():
         self.fruit.draw(self.surface)            # Fruit描画
         pygame.display.update()
     
+    def gameOver(self):
+        best_score = max(len(self.snake.body), self.best_score)
+        pygame.font.init()
+        wnd = Window(pygame.Rect(70,134,360,140))
+        pygame.display.set_caption("Game Over")  
+        clock = pygame.time.Clock()
+        font = pygame.font.Font(None, 35)
+        while True:
+            clock.tick(60)
+            if not wnd.is_visible:  # ウィンドウ表示中は更新を中止
+                pygame.display.update()
+            wnd.draw(self.surface)  # ウィンドウの描画
+            text = font.render("Game Over", True, (255,255,255))   # 描画する文字列の設定
+            best_score = font.render(f"Your best score is {self.best_score}", True, (255,255,255))
+            yes = font.render("Yes: y", True, (255,0,0))
+            no = font.render("No: n", True, (0,255,0))
+    
+            self.surface.blit(text, [180, 150])
+            self.surface.blit(best_score, [140, 180])
+            self.surface.blit(yes, [140, 220])
+            self.surface.blit(no, [280, 220])
+            
+            pygame.display.update()
+            wnd.show()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    exit()
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    exit()
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_y:
+                    exit()
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_n:
+                    wnd.hide()
+                    wnd.draw(self.surface)
+                    break
+            else:
+                continue
+            break
+        self.snake.reset((10,10))
+
     def play(self):
-        best_score = 0
+        self.best_score = 0
         while True:
             pygame.time.delay(50)
             self.clock.tick(10)
-            self.snake.move(self.surface, best_score)
+            self.snake.move(self.surface, self.best_score)
             headPos = self.snake.head.pos
             if headPos[0] >= 20 or headPos[0] < 0 or headPos[1] >= 20 or headPos[1] < 0:
-                print("Score:", len(self.snake.body))
-                best_score = max(len(self.snake.body), best_score)
-                print("Best Score:", best_score)
-                self.snake.reset((10, 10))
+                self.gameOver()
 
             if self.snake.body[0].pos == self.fruit.pos:
                 self.snake.addTail()
@@ -270,10 +308,7 @@ class Game():
                 
             for x in range(len(self.snake.body)):
                 if self.snake.body[x].pos in list(map(lambda z: z.pos, self.snake.body[x+1:])):
-                    print("Score:", len(self.snake.body))
-                    best_score = max(len(self.snake.body), best_score)
-                    print("Best Score:", best_score)
-                    self.snake.reset((10,10))
+                    self.gameOver()
                     break
                         
             self.allDraw()
