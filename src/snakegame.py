@@ -75,14 +75,19 @@ class Snake():
     def move(self, surface):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                wnd = Window(pygame.Rect(140,334,360,140))
+                pygame.font.init()
+                wnd = Window(pygame.Rect(70,134,360,140))
+                pygame.display.set_caption("Quit option")  
                 clock = pygame.time.Clock()
+                font = pygame.font.Font(None, 55)
                 while True:
                     clock.tick(60)
                     # ウィンドウ表示中は更新を中止
                     if not wnd.is_visible:
                         pygame.display.update()
                     wnd.draw(surface)  # ウィンドウの描画
+                    text = font.render("Quit?", True, (255,255,255))   # 描画する文字列の設定
+                    surface.blit(text, [180, 150])
                     pygame.display.update()
                     wnd.show()
                     for event in pygame.event.get():
