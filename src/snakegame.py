@@ -80,7 +80,7 @@ class Snake():
                 wnd = Window(pygame.Rect(70,134,360,140))
                 pygame.display.set_caption("Quit option")  
                 clock = pygame.time.Clock()
-                font = pygame.font.Font(None, 15)
+                font = pygame.font.Font(None, 35)
                 while True:
                     clock.tick(60)
                     # ウィンドウ表示中は更新を中止
@@ -89,8 +89,14 @@ class Snake():
                     wnd.draw(surface)  # ウィンドウの描画
                     text = font.render("Quit?", True, (255,255,255))   # 描画する文字列の設定
                     best_score = font.render(f"Your best score is {self.best_score}", True, (255,255,255))
+                    yes = font.render("Yes: y", True, (255,0,0))
+                    no = font.render("No: n", True, (0,255,0))
+            
                     surface.blit(text, [180, 150])
-                    surface.blit(best_score, [180, 180])
+                    surface.blit(best_score, [140, 180])
+                    surface.blit(yes, [140, 220])
+                    surface.blit(no, [280, 220])
+                    
                     pygame.display.update()
                     wnd.show()
                     for event in pygame.event.get():
@@ -199,8 +205,8 @@ class Game():
     Game開始時に設定
     """
     def __init__(self):
-        pygame.display.set_caption("Snake Game!!")
         self.surface = pygame.display.set_mode((Width, Height))
+        pygame.display.set_caption("Snake Game!!")
         self.snake = Snake(pos=(10,10), color=(255,0,0)) # Snakeの初期値、色を決定
         self.snake.addTail()                             # Snakeは最初2つのCubeを持っていることにする
         self.clock = pygame.time.Clock()
