@@ -72,14 +72,15 @@ class Snake():
         self.x = 0
         self.y = 1
 
-    def move(self, surface):
+    def move(self, surface, best_score):
+        self.best_score = best_score
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.font.init()
                 wnd = Window(pygame.Rect(70,134,360,140))
                 pygame.display.set_caption("Quit option")  
                 clock = pygame.time.Clock()
-                font = pygame.font.Font(None, 55)
+                font = pygame.font.Font(None, 15)
                 while True:
                     clock.tick(60)
                     # ウィンドウ表示中は更新を中止
@@ -87,7 +88,9 @@ class Snake():
                         pygame.display.update()
                     wnd.draw(surface)  # ウィンドウの描画
                     text = font.render("Quit?", True, (255,255,255))   # 描画する文字列の設定
+                    best_score = font.render(f"Your best score is {self.best_score}", True, (255,255,255))
                     surface.blit(text, [180, 150])
+                    surface.blit(best_score, [180, 180])
                     pygame.display.update()
                     wnd.show()
                     for event in pygame.event.get():
@@ -247,7 +250,7 @@ class Game():
         while True:
             pygame.time.delay(50)
             self.clock.tick(10)
-            self.snake.move(self.surface)
+            self.snake.move(self.surface, best_score)
             headPos = self.snake.head.pos
             if headPos[0] >= 20 or headPos[0] < 0 or headPos[1] >= 20 or headPos[1] < 0:
                 print("Score:", len(self.snake.body))
