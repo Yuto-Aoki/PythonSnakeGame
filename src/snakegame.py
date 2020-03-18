@@ -221,7 +221,7 @@ class Game():
         pygame.display.update()
     
     def gameOver(self):
-        best_score = max(len(self.snake.body), self.best_score)
+        self.best_score = max(len(self.snake.body), self.best_score)
         pygame.font.init()
         wnd = Window(pygame.Rect(70,134,360,140))
         pygame.display.set_caption("Game Over")  
