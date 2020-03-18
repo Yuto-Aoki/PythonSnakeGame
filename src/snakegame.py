@@ -251,7 +251,7 @@ class Game():
                     exit()
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_y:
                     exit()
-                if event.type == pygame.KEYDOWN and event.key == pygame.K_n:
+                if event.type == pygame.KEYDOWN and (event.key == pygame.K_n or event.key != pygame.K_y):
                     wnd.hide()
                     wnd.draw(self.surface)
                     break
